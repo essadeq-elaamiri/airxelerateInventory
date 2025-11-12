@@ -3,6 +3,7 @@ package com.airxelerate.airxelerateInventory.controller;
 import com.airxelerate.airxelerateInventory.exception.FlightNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,6 +21,16 @@ public class GlobalExceptionHandler {
         errorBody.put("message", flightNotFoundException.getMessage());
 
         return new ResponseEntity<>(errorBody, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex){
+        Map<String, String> errorBody = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            errorBody.put(fieldError.getField(), fieldError.getDefaultMessage());
+        });
+        return new ResponseEntity<>(errorBody, HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler(Exception.class)

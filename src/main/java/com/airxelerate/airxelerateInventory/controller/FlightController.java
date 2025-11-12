@@ -5,6 +5,7 @@ import com.airxelerate.airxelerateInventory.dto.FlightResponseDTO;
 import com.airxelerate.airxelerateInventory.service.FlightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class FlightController {
 
     @Operation(summary = "Insert a flight")
     @PostMapping("/flights")
-    public ResponseEntity<FlightResponseDTO> insertFlight(@RequestBody FlightRequestDTO flightRequestDTO){
+    public ResponseEntity<FlightResponseDTO> insertFlight(@Valid @RequestBody FlightRequestDTO flightRequestDTO){
         return new ResponseEntity<>(flightService.insertFlight(flightRequestDTO), HttpStatus.CREATED);
     }
 
